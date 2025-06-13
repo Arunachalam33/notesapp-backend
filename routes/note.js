@@ -8,17 +8,17 @@ import {
 import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = express.Router();
-
+router.use(authMiddleware);
 // Create a note
-router.post("/",authMiddleware, createNote);
+router.post("/", createNote);
 
 // Get all notes for the logged-in user
-router.get("/",authMiddleware, getNotes);
+router.get("/", getNotes);
 
 // Update a note
-router.put("/:id",authMiddleware, updateNote);
+router.put("/:id", updateNote);
 
 // Delete a note
-router.delete("/:id",authMiddleware, deleteNote);
+router.delete("/:id", deleteNote);
 
 export default router;
