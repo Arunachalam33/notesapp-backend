@@ -1,23 +1,11 @@
 import pool from "../db/db.js";
-import jwt from "jsonwebtoken";
 
-// Extract userId from JWT token
-function getUserIdFromToken(req) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) return null;
 
-  const token = authHeader.split(" ")[1];
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    return decoded.id;
-  } catch (err) {
-    return null;
-  }
-}
+
 
 // CREATE a note
 export async function createNote(req, res) {
-  const userId = getUserIdFromToken(req);
+  const userId = req.user.id;
   if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
   const { title, content } = req.body;
@@ -35,7 +23,7 @@ export async function createNote(req, res) {
 
 // GET all notes
 export async function getNotes(req, res) {
-  const userId = getUserIdFromToken(req);
+  const userId = req.user.id;
   if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
   try {
@@ -52,7 +40,7 @@ export async function getNotes(req, res) {
 
 // UPDATE a note
 export const updateNote = async (req, res) => {
-  const userId = getUserIdFromToken(req);
+  const userId = req.user.id;
   if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
   const { id } = req.params;
@@ -77,7 +65,7 @@ export const updateNote = async (req, res) => {
 
 // DELETE a note
 export const deleteNote = async (req, res) => {
-  const userId = getUserIdFromToken(req);
+  const userId =req.user.id;
   if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
   const { id } = req.params;
